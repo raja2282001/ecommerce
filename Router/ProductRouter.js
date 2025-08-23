@@ -1,14 +1,21 @@
 const express = require("express");
 const multer = require("multer");
 const path = require("path");
+const fs = require("fs");
 const Router = express.Router();
 const ProductController = require("../Controller/ProductController");
 const verifyToken = require("../middleware/auth");
 
+// Ensure uploads folder exists
+const uploadsDir = path.join(__dirname, "..", "uploads");
+if (!fs.existsSync(uploadsDir)) {
+    fs.mkdirSync(uploadsDir);
+}
+
 // Set up storage engine for multer
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, "uploads/");
+        cb(null, uploadsDir);
     },
     filename: function (req, file, cb) {
         cb(null, Date.now() + path.extname(file.originalname));
@@ -32,7 +39,11 @@ const upload = multer({
 
 // Add product with image upload
 Router.post("/add", upload.single("image"), ProductController.createproduct);
-Router.get("/list", ProductController.listallproduct);
-Router.get("/detail/:id", ProductController.productdetail);
+
+// List all products (protected)
+Router.get("/list", verifyToken, ProductController.listallproduct);
+
+// Get product detail (protected)
+Router.get("/detail/:id", verifyToken, ProductController.productdetail);
 
 module.exports = Router;

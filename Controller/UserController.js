@@ -40,7 +40,7 @@ const loginuser = (req, res) => {
             return res.status(404).json({ message: "invalid email or password" });
         }
         // Generate JWT token
-        const token = jwt.sign({ id: user._id, email: user.email }, process.env.JWT_SECRET, { expiresIn: "1h" });
+        const token = jwt.sign({ id: user._id, email: user.email }, process.env.JWT_SECRET, { expiresIn: "24h" });
         res.status(202).json({
             message: "successfully login",
             token,
