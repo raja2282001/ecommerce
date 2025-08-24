@@ -16,6 +16,10 @@ const productRouter = require("./Router/ProductRouter");
 app.use("/user", userRouter);
 app.use("/product", productRouter);
 
+app.use("/",(req,res)=>{
+    res.send("Api is running");
+})
+
 mongoose.connect(process.env.MONGO_URL, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => console.log("db connected"))
     .catch((err) => console.log(err));
