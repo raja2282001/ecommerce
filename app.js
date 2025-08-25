@@ -17,7 +17,7 @@ app.use("/user", userRouter);
 app.use("/product", productRouter);
 
 app.use("/",(req,res)=>{
-    res.send("Api is running");
+    res.send("Api is running successfully");
 })
 
 // Connect to MongoDB only if not already connected
