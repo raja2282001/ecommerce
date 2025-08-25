@@ -19,7 +19,7 @@ app.use("/product", productRouter);
 
 // Default route
 app.get("/", (req, res) => {
-  res.send("API is running ✅");
+  res.status(200).json({ message: "Welcome to E-commerce API" });
 });
 
 // MongoDB connect (runs once)
