@@ -20,11 +20,20 @@ app.use("/",(req,res)=>{
     res.send("Api is running");
 })
 
-mongoose.connect(process.env.MONGO_URL, { useNewUrlParser: true, useUnifiedTopology: true })
-    .then(() => console.log("db connected"))
-    .catch((err) => console.log(err));
+// Connect to MongoDB only if not already connected
+if (mongoose.connection.readyState === 0) {
+    mongoose.connect(process.env.MONGO_URL, { useNewUrlParser: true, useUnifiedTopology: true })
+        .then(() => console.log("db connected"))
+        .catch((err) => console.log(err));
+}
 
-const PORT = process.env.PORT || 7000;
-app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
-});
+// Export the app for Vercel serverless deployment
+module.exports = app;
+
+// For local development
+if (require.main === module) {
+    const PORT = process.env.PORT || 7000;
+    app.listen(PORT, () => {
+        console.log(`Server is running on port ${PORT}`);
+    });
+}
